@@ -1,0 +1,151 @@
+Day -1:(MERN Intro)
+const fs = require("fs");
+
+//read a file
+//non blocking file operations
+fs.readFile("f1.txt",'utf-8', (err, data) => {
+    if(err){
+        console.log(err);
+        return;
+    }else{
+        console.log(data);
+    }
+})
+
+//write a file
+const content = "Hello world";
+fs.writeFile('f2.txt', content, 'utf-8', (err) => { //'f2.txt 'Helloworld and creates a f2.txt file with the content Hellow world
+    //if we again replace it with f1.txt then the content in the f1.txt is changed into Hello World same as f2.txt
+    if(err){
+        console.log(err);
+        return;
+    }
+})
+
+// fs.writeFileSync 
+//it is a synchronous function, it blocks the node js event loop
+
+//working with directories
+//fs.mkdir() //make directory
+//fs.rmdir() //remove directory
+//fs.readdir() //read directory
+//fs.stat() //what we are reading currently
+
+//fs.rename -> can be used to rename files
+fs.rename('f1.txt','newF1.txt', (err) => {
+    if(err){
+        console.log(err);
+        return;
+    }
+    console.log("File has been renamed");
+});
+
+//remove or delete a file
+fs.unlink('./text/newF1.txt',(err) => {
+    if(err){
+        console.log(err);
+        return;
+    }
+    console.log("File has been removed");
+})
+
+//fs.stat() -> provides info about file's status, including it size, permissions, modifications timestamp
+fs.stat("f2.txt", (err, stats) => {
+    if(err){
+        console.log(err);
+        return;
+    }
+    console.log(stats);
+})
+o/p:
+Stats {
+  dev: 4034504245,
+  mode: 33206,
+  nlink: 1,
+  uid: 0,
+  gid: 0,
+  rdev: 0,
+  blksize: 4096,
+  ino: 7881299348176429,
+  size: 11,
+  blocks: 0,
+  atimeMs: 1739959737023.0342,
+  mtimeMs: 1739959584460.886,
+  ctimeMs: 1739959584460.886,
+  birthtimeMs: 1739959584458.9636
+}
+
+////fs.stat() -> provides info about file's status, including it size, permissions, modifications timestamp
+fs.stat("f2.txt", (err, stats) => {
+    if(err){
+        console.log(err);
+        return;
+    }
+    console.log(stats.size);
+    console.log(stats.isDirectory());
+})
+o/p:
+11
+false
+
+fs.stat("text", (err, stats) => {
+    if(err){
+        console.log(err);
+        return;
+    }
+    console.log(stats.size);
+    console.log(stats.isDirectory());
+})
+o/p:
+0 because there are no files as of now
+true
+
+//fs.mkdir() //make directory
+const directoryName = 'my-directory';
+fs.mkdir(directoryName, (err) => {
+    if(err){
+        console.error(`Error creating directory: ${err}`);
+    }else{
+        console.log(`Directory "${directoryName}" created successfully.`); //my directory is created
+    }
+});
+o/p:
+Directory "my-directory" created successfully.
+
+//fs.rmdir() //remove directory
+const directoryName = 'my-directory';
+fs.rmdir(directoryName, (err) => {
+    if(err){
+        console.error(`Error removing directory: ${err}`);
+    }else{
+        console.log(`Directory "${directoryName}" removed successfully.`); //my directory is created
+    }
+});
+o/p:
+Directory "my-directory" removed successfully.
+//{recursive:true} -> directory and It's contents are deleted recursively
+
+const filePath = "/my-directory/file/f1.txt";
+if(fs.existsSync(filePath)){
+    console.log("the filepath exists");
+}
+else console.log("the file path doesn't exists");
+o/p:the file path doesn't exists
+
+//fs.existsSync checks if a directory exists or not
+const filePath = "./my-directory/f2.txt";
+if(fs.existsSync(filePath)){
+    console.log("the filepath exists");
+}
+else console.log("the file path doesn't exists");
+o/p:the filepath exists
+
+//fs.existsAsync checks if a directory exists or not
+const filePath = "./my-directory/f2.txt";
+fs.access(filePath, fs.constants.F_OK, (err) => {
+    if(err){
+        console.log("the filepath does not exixts");
+    }
+    console.log("the filepath exists");
+})
+o/p:the filepath exists
