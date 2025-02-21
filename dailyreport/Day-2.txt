@@ -1,0 +1,240 @@
+http.js>>>>:
+const http = require("http");
+
+const server = http.createServer((req, res) => {
+    //handle incoming requests here
+    // req -> request Object -> it contains details of th info required from server
+    // res -> response Object -> it contains the response from server
+    
+    //steps
+    //set response header
+    res.setHeader("Content-Type", "text/plain");
+    
+    //write response content
+    res.write("Hello World!");
+
+    //end the response
+    res.end();
+})
+
+const port = 3000; //flat number
+const host = "localhost" //the society address -> the server will only accept the connections from the same machine.
+server.listen(port, host, () => {
+    console.log(`Server is listening on http://${host}:${port}`);  
+})
+O/P: Hello World!
+
+
+
+const http = require("http");
+
+const server = http.createServer((req, res) => {
+    //handle incoming requests here
+    // req -> request Object -> it contains details of th info required from server
+    // res -> response Object -> it contains the response from server
+    
+    //steps
+    //set response header
+    res.setHeader("Content-Type", "text/html");
+    
+    //write response content
+    res.write("<html><head><title>NodeJS HTTP Server</title></head><body>");
+    res.write("<h1>Hello World!</h1>");
+    res.write("</body></html>");
+
+    //end the response
+    res.end();
+})
+
+const port = 3000; //flat number
+const host = "localhost" //the society address -> the server will only accept the connections from the same machine.
+server.listen(port, host, () => {
+    console.log(`Server is listening on http://${host}:${port}`);
+    
+})
+o/p: Hello World!
+not refreshing itself we need to refresh so installed nodemon
+
+
+const http = require("http");
+
+const server = http.createServer((req, res) => {
+    //handle incoming requests here
+    // req -> request Object -> it contains details of th info required from server
+    // res -> response Object -> it contains the response from server
+    
+    //steps
+    //set response header
+    res.setHeader("Content-Type", "application/json");
+    
+    //write response content
+    // res.write("<html><head><title>NodeJS HTTP Server</title></head><body>");
+    // res.write("<h1>Hello World!</h1>");
+    // res.write("</body></html>");
+
+    const jsonData = {
+        message: "Hello World!",
+        data: new Date()
+    }
+    const jsonResponse = JSON.stringify(jsonData);
+    res.write(jsonResponse);
+
+
+    //end the response
+    res.end();
+})
+
+const port = 3000; //flat number
+const host = "localhost" //the society address -> the server will only accept the connections from the same machine.
+server.listen(port, host, () => {
+    console.log(`Server is listening on http://${host}:${port}`);  
+})
+o/p: {
+  "message": "Hello World!",
+  "data": "2025-02-20T11:39:15.173Z"
+}
+
+
+const http = require("http");
+
+const server = http.createServer((req, res) => {
+    //handle incoming requests here
+    // req -> request Object -> it contains details of th info required from server
+    // res -> response Object -> it contains the response from server
+    
+
+    console.log(req.method);
+    console.log(req.url);
+
+    //steps
+    //set response header
+    // res.setHeader("Content-Type", "application/json");
+    
+    //write response content
+    // res.write("<html><head><title>NodeJS HTTP Server</title></head><body>");
+    // res.write("<h1>Hello World!</h1>");
+    // res.write("</body></html>");
+
+    const jsonData = {
+        message: "Hello World!",
+        data: new Date()
+    }
+    const jsonResponse = JSON.stringify(jsonData);
+    res.write(jsonResponse);
+
+
+    //end the response
+    res.end();
+})
+
+const port = 3000; //flat number
+const host = "localhost" //the society address -> the server will only accept the connections from the same machine.
+server.listen(port, host, () => {
+    console.log(`Server is listening on http://${host}:${port}`); 
+})
+o/p: Server is listening on http://localhost:3000
+GET
+/
+GET
+/favicon.ico
+GET
+/
+GET
+/favicon.ico
+
+
+
+const http = require("http");
+const server = http.createServer((req, res) => {
+    //handle incoming requests here
+    // req -> request Object -> it contains details of th info required from server
+    // res -> response Object -> it contains the response from server
+
+    console.log(req.method);
+    //console.log(req); //shows all the requests 
+    console.log(req.url);
+
+    //steps
+    //set response header
+    // res.setHeader("Content-Type", "application/json");
+    
+    //write response content
+    // res.write("<html><head><title>NodeJS HTTP Server</title></head><body>");
+    // res.write("<h1>Hello World!</h1>");
+    // res.write("</body></html>");
+    
+    // const jsonResponse = JSON.stringify(jsonData);
+    if(req.method == "GET"){
+        if(req.url == "/"){
+            const jsonData = {
+                message: "Hello World!",
+                data: new Date()
+            }
+            const jsonResponse = JSON.stringify(jsonData);
+            res.write(jsonResponse);
+        }else if(req.url == "/trendingSongs"){
+            const jsonData = {
+                message: "List of trending songs!",
+                data: new Date()
+            }
+            const jsonResponse = JSON.stringify(jsonData);
+            res.write(jsonResponse);
+        }else{
+            const jsonData = {
+                message: "404 page!",
+                data: new Date()
+            }
+            const jsonResponse = JSON.stringify(jsonData);
+            res.write(jsonResponse);
+        }
+    }
+
+    //end the response
+    res.end();
+})
+
+const port = 3000; //flat number
+const host = "localhost" //the society address -> the server will only accept the connections from the same machine.
+server.listen(port, host, () => {
+    console.log(`Server is listening on http://${host}:${port}`); 
+})
+localhost:3000/
+o/p:{"message":"Hello World!","data":"2025-02-21T01:56:34.616Z"}
+localhost:3000/trendingsongs
+{"message":"List of trending songs!","data":"2025-02-21T02:08:47.702Z"}
+localhost:3000/(anything else)
+{"message":"404 page!","data":"2025-02-21T02:11:25.576Z"}
+
+
+
+
+>>>created express folder in Intro
+>express
+>>node_modules
+>>index.js
+>>package-lock.json
+>>package.json
+index.js:
+//import the express module
+const express = require("express");
+
+//create an express application
+const app = express();
+
+app.get("/", (req,res) => {
+    res.send("Hello from Express");  //res.write() + res.end()
+});
+
+app.get("/trendingsongs", (req, res) => {
+    res.send("List of trending Songs");
+});
+
+const port = 3000;
+app.listen(port, () => {
+    console.log(`Server is listening on port${port}`); 
+})
+o/p:
+localhost:3000/
+Hello from Express
+localhost:3000/trendingsongs
+List of trending Songs
