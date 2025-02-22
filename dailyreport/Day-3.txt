@@ -1,3 +1,4 @@
+middleware>>>>:
 //import the express module
 const express = require("express");
 
@@ -75,3 +76,15 @@ const port = 3000;
 app.listen(port, () => {
     console.log(`Server is listening on port${port}`); 
 })
+
+o/p:
+localhost:3000/users
+(userdata);
+localhost:3000/index.html
+Hello World
+localhost:3000/name.html
+bye bye!
+
+Postman:(postman learn)
+http://localhost:3000/index.html
+o/p: Hellow world!
