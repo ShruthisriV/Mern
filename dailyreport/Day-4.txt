@@ -1,0 +1,403 @@
+index.js>>>>:
+//import the express module
+const express = require("express");
+const ProductModel = require("./db");
+
+//create an express application
+const app = express();
+
+//middleware
+//it helps your express application understand and work with json data sent in requests
+//it automatically parses incoming JSON requests and makes the data available in req.body
+//this function will be called for every incoming requests, unless you specify a path to limit its scopes
+app.use(express.json());
+
+//serves static files such as html css js images etc.
+app.use(express.static("public")) //it is a type of middleware, whatever data we have in public folder will be displayed
+const loggerMiddleware = (req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+}
+const parseMiddleware = (req, res, next) => {
+    console.log("request received for parsing", req.method, + " "+req.url);
+    next();
+}
+app.use(loggerMiddleware);
+const users = [
+    { id: 1, name: "user1"},
+    { id: 2, name: "user2"},
+];
+
+app.get("/users", (req,res) => {
+    // res.send("Hello from Express");  //res.write() + res.end()
+    let queryparams = req.query;
+    console.log(queryparams);
+    //on the basis of query sent, we can query the db and get results
+    res.status(200).json({
+        message: "All Users",
+        userList: users
+    })
+});
+
+//to do using POSTMAN
+// app.post("/users", (req,res) => {
+//     let dataSentFromClientServer = req.body;
+//     console.log(dataSentFromClientServer);
+//     console.log("received the POST request");
+// });
+
+app.post("/users", parseMiddleware,(req,res) => {
+    let dataSentFromClientServer = req.body;
+    console.log(dataSentFromClientServer);
+    console.log("received the POST request");
+    res.status(200).json({
+        message: "User received",
+    })
+});
+
+//query params or route params
+app.get("/users/:id", (req, res) => {
+    let {id: userId} = req.params;
+    console.log(typeof userId, userId);
+    const user = users.find(user => user.id == userId);
+    if(user){
+        res.status(200).json({
+            message: "User found",
+            user: user
+        })
+    }else{
+        res.status(200).json({
+            message: "User not found",
+            user: []
+        })
+    }
+});
+
+app.post("/api/products", async (req, res) => {
+    const body = req.body
+    const product = await ProductModel.create({
+        product_name: body.product_name,
+        product_price : body.product_price,
+        isInStock: body.isInStock,
+        category: body.category
+    })
+    res.status(200).json({
+        message:"producr added",
+        product
+    })
+});
+
+const port = 3000;
+app.listen(port, () => {
+    console.log(`Server is listening on port${port}`); 
+})
+db.js>>>>:
+const mongoose = require("mongoose");
+
+const dbURL = "mongodb+srv://Shruthisri:Shruthisri123@cluster0.tyswe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+mongoose.connect(dbURL)
+.then((function(connection){
+    console.log("connected to db");
+}))
+.catch(err => console.log(err))
+
+
+const productSchema = new mongoose.Schema({
+    product_name:{
+        type: String,
+        required: true
+    },
+    product_price: {
+        type: String,
+        required: true
+    },
+    isInStock: {
+        type: Boolean,
+        required: true,
+    },
+    category: {
+        type: String,
+        required: true
+    },
+
+},{timestamps: true});
+
+const ProductModel=mongoose.model("product", productSchema);
+
+module.exports = ProductModel;
+postman:
+POST:http://localhost:3000/api/products
+body(raw):
+{
+    "product_name": "Iphone",
+    "product_price": "100",
+    "isInStock":true,
+    "category": "electronics"
+}
+o/p (in mongodb atlas-collections under cluster0):
+Query Results: 1-1 of 1
+_id: ObjectId('67bc2269de11b39e449d71df')
+product_name:"Iphone"
+product_price:"100"
+isInStock:true
+category:"electronics"
+createdAt:2025-02-24T07:40:25.189+00:00
+updatedAt:2025-02-24T07:40:25.189+00:00
+__v:0
+o/p (in terminal):
+Server is listening on port3000
+connected to db
+[2025-02-24T07:39:17.204Z] GET /api/products  
+[2025-02-24T07:40:25.170Z] POST /api/products
+
+
+
+index.js>>>:
+//import the express module
+const express = require("express");
+const ProductModel = require("./db");
+
+//create an express application
+const app = express();
+
+//middleware
+//it helps your express application understand and work with json data sent in requests
+//it automatically parses incoming JSON requests and makes the data available in req.body
+//this function will be called for every incoming requests, unless you specify a path to limit its scopes
+app.use(express.json());
+
+//serves static files such as html css js images etc.
+app.use(express.static("public")) //it is a type of middleware, whatever data we have in public folder will be displayed
+const loggerMiddleware = (req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+}
+const parseMiddleware = (req, res, next) => {
+    console.log("request received for parsing", req.method, + " "+req.url);
+    next();
+}
+app.use(loggerMiddleware);
+const users = [
+    { id: 1, name: "user1"},
+    { id: 2, name: "user2"},
+];
+
+app.get("/users", (req,res) => {
+    // res.send("Hello from Express");  //res.write() + res.end()
+    let queryparams = req.query;
+    console.log(queryparams);
+    //on the basis of query sent, we can query the db and get results
+    res.status(200).json({
+        message: "All Users",
+        userList: users
+    })
+});
+
+//to do using POSTMAN
+// app.post("/users", (req,res) => {
+//     let dataSentFromClientServer = req.body;
+//     console.log(dataSentFromClientServer);
+//     console.log("received the POST request");
+// });
+
+app.post("/users", parseMiddleware,(req,res) => {
+    let dataSentFromClientServer = req.body;
+    console.log(dataSentFromClientServer);
+    console.log("received the POST request");
+    res.status(200).json({
+        message: "User received",
+    })
+});
+
+//query params or route params
+app.get("/users/:id", (req, res) => {
+    let {id: userId} = req.params;
+    console.log(typeof userId, userId);
+    const user = users.find(user => user.id == userId);
+    if(user){
+        res.status(200).json({
+            message: "User found",
+            user: user
+        })
+    }else{
+        res.status(200).json({
+            message: "User not found",
+            user: []
+        })
+    }
+});
+
+//to find whether the project is present or not
+app.get("/api/products", async (req, res) => {
+    const product = await ProductModel.find({});
+    res.status(200).json({
+        message:"producr added",
+        product
+    })
+});
+
+// app.post("/api/products", async (req, res) => {
+//     const body = req.body
+//     const product = await ProductModel.create({
+//         product_name: body.product_name,
+//         product_price : body.product_price,
+//         isInStock: body.isInStock,
+//         category: body.category
+//     })
+//     res.status(200).json({
+//         message:"producr added",
+//         product
+//     })
+// });
+
+const port = 3000;
+app.listen(port, () => {
+    console.log(`Server is listening on port${port}`); 
+})
+o/p (postman):
+GET:http://localhost:3000/api/products
+body(raw):
+{
+    "product_name": "Iphone",
+    "product_price": "100",
+    "isInStock":true,
+    "category": "electronics"
+}
+o/p (in postman):
+{
+    "message": "producr added",
+    "product": [
+        {
+            "_id": "67bc2269de11b39e449d71df",
+            "product_name": "Iphone",
+            "product_price": "100",
+            "isInStock": true,
+            "category": "electronics",
+            "createdAt": "2025-02-24T07:40:25.189Z",
+            "updatedAt": "2025-02-24T07:40:25.189Z",
+            "__v": 0
+        }
+    ]
+}
+//uncommented app.post of creating and the o/p is:
+{
+  "message": "producr added",
+  "product": [
+    {
+      "_id": "67bc2269de11b39e449d71df",
+      "product_name": "Iphone",
+      "product_price": "100",
+      "isInStock": true,
+      "category": "electronics",
+      "createdAt": "2025-02-24T07:40:25.189Z",
+      "updatedAt": "2025-02-24T07:40:25.189Z",
+      "__v": 0
+    }
+  ]
+}
+//if u want to update again go to postman keep it POST mode
+//change the data in the body and click send
+//come to mongodb refresh and there we get the one more posted data
+//get product by id
+app.get("/api/products", async (req, res) => {
+    const product = await ProductModel.find
+    ({"isInStock":true})
+    res.status(200).json({
+        message:"product found",
+        product
+    })
+});
+o/p:{
+    "message": "product found",
+    "product": [
+        {
+            "_id": "67bc2269de11b39e449d71df",
+            "product_name": "Iphone",
+            "product_price": "100",
+            "isInStock": true,
+            "category": "electronics",
+            "createdAt": "2025-02-24T07:40:25.189Z",
+            "updatedAt": "2025-02-24T07:40:25.189Z",
+            "__v": 0
+        },
+        {
+            "_id": "67bc26b9a574a051006c5d69",
+            "product_name": "Jio",
+            "product_price": "100",
+            "isInStock": true,
+            "category": "electronics",
+            "createdAt": "2025-02-24T07:58:49.545Z",
+            "updatedAt": "2025-02-24T07:58:49.545Z",
+            "__v": 0
+        }
+    ]
+}
+//we can also have findById,
+//update product(PUT & PATCH)
+app.put("/api/products", async (req, res) => {
+    const {id} = req.params;
+    const {body} = req;
+    const product = await ProductModel.findByIdAndUpdate
+    (id, body)
+    res.status(200).json({
+        message:"product updated",
+        product
+    })
+});
+//delete a product
+app.delete("/api/products", async (req, res) => {
+    const {id} = req.params;
+    const {body} = req;
+    const product = await ProductModel.findByIdAndUpdate
+    (id, body)
+    res.status(200).json({
+        message:"product updated",
+        product
+    })
+});
+>>> moved db.js into config folder
+
+db.js>>>:
+const mongoose = require("mongoose");
+
+const dbURL =
+  "mongodb+srv://Shruthisri:Shruthisri123@cluster0.tyswe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(dbURL);
+    console.log("connected to db");
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports = connectDB;
+
+
+routes>products.js>>>:
+const express = require("express");
+const {createProduct,
+    getAllProducts,
+    getProductById,
+    updateProduct,
+    deleteProduct} = require("../controllers/products");
+const productRouter = express.Router();
+
+//creating 
+productRouter.post("/", createProduct);
+
+//read
+productRouter.get("/", getAllProducts);
+
+// get product by id
+productRouter.get("/:id", getProductById);
+
+//update product(PUT & PATCH)
+productRouter.put("/:id", updateProduct);
+
+//delete a product
+productRouter.delete("/:id", deleteProduct);
+
+module.exports = productRouter

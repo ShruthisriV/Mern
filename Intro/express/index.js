@@ -53,7 +53,7 @@ app.post("/users", parseMiddleware,(req,res) => {
     })
 });
 
-//query params or route params
+//route params
 app.get("/users/:id", (req, res) => {
     let {id: userId} = req.params;
     console.log(typeof userId, userId);
@@ -71,7 +71,12 @@ app.get("/users/:id", (req, res) => {
     }
 });
 
-const port = 3000;
-app.listen(port, () => {
-    console.log(`Server is listening on port${port}`); 
-})
+//get product by id
+app.get("/api/products/:id",async (req, res) => {
+    const product = await ProductModel.findById
+    (id)
+    res.status(200).json({
+        message:"product found",
+        product
+    })
+}); 
