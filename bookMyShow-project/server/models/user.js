@@ -1,7 +1,9 @@
 const mongoose=require("mongoose");
-// const path = require("path");
-// const collectionName = path.dirname("./");
-// console.log(__dirname);
+const path = require("path");
+let collectionName = path.basename(__filename).split(".")[0];
+// let collectionName = path.basename(__filename).slice(0, 4);
+// console.log(collectionName);
+// console.log(path.basename(__filename, path.extname(__filename)));
 
 const userSchema=new mongoose.Schema({
     name:{
@@ -10,7 +12,8 @@ const userSchema=new mongoose.Schema({
     },
     email:{
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password:{
         type: String,
@@ -23,6 +26,6 @@ const userSchema=new mongoose.Schema({
     },
 });
 
-const UserModel = mongoose.model("user",userSchema);
+const UserModel = mongoose.model(collectionName,userSchema);
 
 module.exports=UserModel;
