@@ -234,3 +234,35 @@ module.exports=UserModel;
 o/p:
 PS C:\Users\user\Mern\bookMyShow-project\server\models> node user.js
 C:\Users\user\Mern\bookMyShow-project\server\models
+
+const mongoose=require("mongoose");
+const path = require("path");
+let collectionName = path.basename(__filename).split(".")[0];
+// let collectionName = path.basename(__filename).slice(0, 4);
+// console.log(collectionName);
+// console.log(path.basename(__filename, path.extname(__filename)));
+
+const userSchema=new mongoose.Schema({
+    name:{
+        type: String,
+        required: true
+    },
+    email:{
+        type: String,
+        required: true,
+        unique: true
+    },
+    password:{
+        type: String,
+        required: true
+    },
+    isAdmin: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+});
+
+const UserModel = mongoose.model(collectionName,userSchema);
+
+module.exports=UserModel;
