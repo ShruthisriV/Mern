@@ -2,6 +2,7 @@ const express = require("express");
 const UserModel = require("../models/user");
 
 const userRouter = express.Router();
+
 userRouter.post("/register", async(req, res) => {
     try{
         const {email} = req.body;
@@ -22,6 +23,35 @@ userRouter.post("/register", async(req, res) => {
         })
     }catch(err){
         console.log(err);
+        return res.status(500).json({
+            message: err.message
+        })
+    }
+})
+
+//login
+userRouter.post("/login", async(req, res) => {
+    try{
+        const{email, password: passwordFormClient} = req.body;
+        const user = UserModel.findOne({email});
+        if(!user){
+            return res.status(400).json({
+                message: "User does not exists. please register."
+            });
+        }
+        if(passwordFormClient !== user.password){
+            return res.status(400).json({
+                message: "Invalid Credentials"
+            })
+        }
+        return res.status(200).json({
+            message: "User logged in successfully"
+        })
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({
+            message: err.message
+        })
     }
 })
 
