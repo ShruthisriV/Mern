@@ -1,0 +1,121 @@
+//today we are going to do server side
+src>server.js>>>:
+const dotenv = require('dotenv').config();
+const dbURL = process.env.DB_URL;
+console.log(dbURL);
+
+
+config>db.js>>>:
+const mongoose = require("mongoose");
+const dotenv = require('dotenv');
+dotenv.config();
+console.log(dotenv);
+const dbURL = process.env.DB_URL;
+console.log(dbURL);
+const connectDB = async () => {
+  try {
+    await mongoose.connect(dbURL);
+    console.log("connected to db");
+  } catch (err) {
+    console.log(err);
+  }
+};
+module.exports = connectDB;
+.env
+DB_URL="mongodb+srv://Shruthisri:Shruthisri123@cluster0.tyswe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+
+o/p: in terminal>>>:
+node server.n: populate]js
+mongodb+srv://Shruthisri:Shruthisri123@cn\bookMyShow-project\server\cluster0.tyswe.mongodb.net/?retryWrites=tn\bookMyShow-project\server>nrue&w=majority&appName=Cluster0
+--------------------------------------------------------------------------
+db.js>>>:
+const mongoose = require("mongoose");
+const dotenv = require('dotenv');
+dotenv.config({path:"../.env"});
+const dbURL = process.env.DB_URL;
+console.log(dbURL);
+const connectDB = async () => {
+  try {
+    await mongoose.connect(dbURL);
+    console.log("connected to db");
+  } catch (err) {
+    console.log(err);
+  }
+};
+module.exports = connectDB;
+o/p:PS C:\Users\user\Mern\bookMyShow-project\server\config> node db.js
+mongodb+srv://Shruthisri:Shruthisri123@cluster0.tyswe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+----------------------------------------------------------------------------
+db.js>>>:
+const mongoose = require("mongoose");
+const dbURL = process.env.DB_URL;
+const connectDB = async () => {
+  try {
+    await mongoose.connect(dbURL);
+    console.log("connected to db");
+  } catch (err) {
+    console.log(err);
+  }
+};
+module.exports = connectDB;
+server.js>>>:
+require('dotenv').config();
+const express = require("express");
+const app=express();
+
+const connectDB=require("./config/db")
+connectDB();
+const dbURL = process.env.DB_URL;
+console.log(dbURL);
+o/p:
+PS C:\Users\user\Mern\bookMyShow-project\server>node server.js
+mongodb+srv://Shruthisri:Shruthisri123@cluster0.tyswe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+--------------------------------------------------------------------------------------------------------------------------
+db.js>>>:
+const mongoose = require("mongoose");
+
+const dbURL = process.env.DB_URL;
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(dbURL);
+    console.log("connected to db");
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports = connectDB;
+
+server.js:
+require('dotenv').config();
+const express = require("express");
+const app=express();
+const connectDB=require("./config/db")
+connectDB();
+o/p:
+PS C:\Users\user\Mern\bookMyShow-project\server> node server.js
+connected to db
+------------------------------------------------------------------------------------
+server.js>>>:
+require('dotenv').config();
+const express = require("express");
+const app=express();
+
+const connectDB=require("./config/db")
+connectDB();
+
+app.listen(process.env.PORT || 8082, () => {
+    console.log("server is running");
+})
+o/p:
+PS C:\Users\user\Mern>
+cd bookMyShow-project/server
+PS C:\Users\user\Mern\bookMyShow-project\server> nodemon server.js
+[nodemon] 3.1.9
+[nodemon] to restart at any time, enter `rs`  
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,cjs,json
+[nodemon] starting `node server.js`
+server is running
+connected to db
