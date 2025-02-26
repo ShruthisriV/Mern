@@ -33,7 +33,9 @@ userRouter.post("/register", async(req, res) => {
 userRouter.post("/login", async(req, res) => {
     try{
         const{email, password: passwordFormClient} = req.body;
-        const user = UserModel.findOne({email});
+        const user = await UserModel.findOne({email});
+        console.log(user);
+        
         if(!user){
             return res.status(400).json({
                 message: "User does not exists. please register."

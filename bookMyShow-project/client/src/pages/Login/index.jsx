@@ -1,12 +1,24 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
-import {Form, Input, Button} from 'antd';
-
-const onFinish = (values) => {
-  console.log('Success:', values);
-};
+import {Link, useNavigate} from 'react-router-dom'
+import {Form, Input, Button, message} from 'antd';
+import { LoginUser } from '../../api/users';
 
 function Login() {
+  const navigate = useNavigate();
+  const onFinish = async (values) => {
+    try{
+      const response = await LoginUser(values);
+      console.log(response);
+      if(response.status === 200){
+        message.success(response.message);
+        navigate("/"); //navigate to home page after loging in
+      }else{
+        message.error(response.message);
+      }
+    }catch(err){
+      message.error(err.message);
+    }
+  };
   return (
     <>
       <main className='App-header'>
