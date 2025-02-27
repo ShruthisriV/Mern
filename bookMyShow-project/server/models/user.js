@@ -1,12 +1,11 @@
 const { timeStamp } = require("console");
-const mongoose=require("mongoose");
+const mongoose = require("mongoose");
 const path = require("path");
 let collectionName = path.basename(__filename).split(".")[0];
-// let collectionName = path.basename(__filename).slice(0, 4);
-// console.log(collectionName);
-// console.log(path.basename(__filename, path.extname(__filename)));
+// let collectionName = path.basename(__filename).slice(0,4);
+// let collectionName = path.basename(__filename, path.extname(__filename));
 
-const userSchema=new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name:{
         type: String,
         required: true
@@ -20,14 +19,14 @@ const userSchema=new mongoose.Schema({
         type: String,
         required: true
     },
-    role: {
+    role:{
         type: String,
         enum: ["admin", "user", "partner"],
         required: true,
         default: "user"
-    },
-}, {timestamps: true});
+    }
+}, { timestamps: true });
 
-const UserModel = mongoose.model(collectionName,userSchema);
+const UserModel = mongoose.model(collectionName, userSchema);
 
-module.exports=UserModel;
+module.exports = UserModel;
