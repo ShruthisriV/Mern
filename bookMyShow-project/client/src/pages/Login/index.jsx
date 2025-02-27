@@ -11,7 +11,8 @@ function Login() {
       console.log(response);
       if(response.status === 200){
         message.success(response.message);
-        navigate("/"); //navigate to home page after loging in
+        localStorage.setItem("token", response.data);
+        navigate("/")
       }else{
         message.error(response.message);
       }
