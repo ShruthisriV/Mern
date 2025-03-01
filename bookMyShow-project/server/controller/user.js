@@ -35,7 +35,6 @@ const registerUser = async (req, res) => {
 
 const loginUser =  async (req, res) => {
     try{
-        console.log(req.headers);
         const {email,password: passwordFromClient} = req.body;
         const user = await UserModel.findOne({email});
         
@@ -50,7 +49,7 @@ const loginUser =  async (req, res) => {
             });
         }
         const token = jwt.sign({userId:user["_id"]}, privateKey, {expiresIn:"1d"});
-        console.log(token);
+        console.log("login", token);
         return res.status(200).json({
             message: "User logged in succesfully",
             data: token
@@ -73,7 +72,7 @@ const currentUser = async (req, res) => {
                 data: user
             })
         }else{
-            return res.status(204).json({
+            return res.status(400).json({
                 message: "User not found",
             }) 
         }
