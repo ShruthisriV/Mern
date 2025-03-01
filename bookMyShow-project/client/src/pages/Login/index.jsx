@@ -8,22 +8,22 @@ function Login() {
   const onFinish = async (values) => {
     try{
       const response = await LoginUser(values);
-      if(response.data) {
-        message.success(response.message);
-        localStorage.setItem("token", response.data);
-        navigate("/")
-      }else{
-        message.error(response.message);
-      }
+          if(response.data) {
+            message.success(response.message);
+            localStorage.setItem("token", response.data);
+            navigate("/")
+          }else{
+            message.error(response.message);
+          }
     }catch(err){
       message.error(err.message)
     }
-  };
+  }; 
   useEffect(() => {
     if(localStorage.getItem("token")){
-      navigate("/");
+      navigate("/")
     }
-  }, []);
+  }, [])
  return (
    <>
      <main className="App-header">

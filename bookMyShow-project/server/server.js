@@ -11,6 +11,5 @@ app.use("/api/users", userRouter);
 app.use("/api/movies", MovieRouter);
 
 app.listen(process.env.PORT || 8080, () => {
-    console.log("server is running on port", 
-        process.env.PORT || 8080);
+    console.log("server is running on port", process.env.PORT || 8080);
 })
