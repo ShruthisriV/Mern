@@ -1,8 +1,10 @@
-import { addMovie } from "../controller/movie";
+const { addMovie, getAllMovies, updateMovie, deleteMovie } = require("../controller/movie")
 
-const router = require("express").Router();
-const MovieModel = require("../models/movie");
+const movieRouter = require("express").Router();
 
-router.post("/", addMovie);
+movieRouter.post("/", addMovie);
+movieRouter.post("/", getAllMovies);
+movieRouter.post("/", updateMovie);
+movieRouter.post("/", deleteMovie);
 
-export default router
+module.exports = movieRouter;
