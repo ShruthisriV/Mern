@@ -31,7 +31,7 @@ const getAllTheatres = async (req,res) => {
         res.status(200).json({
             success: true,
             message:"all theatres",
-            data: allMovies
+            data: allTheatres
         })
     }catch(err){
         console.log(err);
@@ -46,7 +46,7 @@ const getAllTheatres = async (req,res) => {
 const updateTheatre = async (req,res) => {
     try{
         const {body} = req;
-        const updatedTheatre = await MovieModel.findByIdAndUpdate(body.theatreId, body);
+        const updatedTheatre = await TheatreModel.findByIdAndUpdate(body.theatreId, body);
         if(!updatedTheatre){
             res.status(400).json({
                 message:"theatre not found"
@@ -68,8 +68,8 @@ const updateTheatre = async (req,res) => {
 
 const deleteTheatre = async (req,res) => {
     try{
-        const {theatreId} = req.params;    
-        const deletedTheatre = await MovieModel.findOneAndDelete({_id:theatreId});
+        const {theatreId} = req.params; 
+        const deletedTheatre = await TheatreModel.findOneAndDelete({_id:theatreId});
         res.status(200).json({
             success: true,
             message:"theatre deleted",
@@ -89,6 +89,11 @@ const partnerTheatres =  async (req,res) => {
         let {partnerId} = req.params;
         const allPartnerTheatres = await TheatreModel.find({owner: partnerId});
 
+        res.status(200).json({
+            success: true,
+            message:"partner theatre retrieved",
+            data: allPartnerTheatres
+        })
     }catch(err){
         res.send({
             success: false,
