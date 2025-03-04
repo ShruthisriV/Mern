@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { Button, Form, Input, message, Radio } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterUser } from "../../api/users";
-import FormItem from "antd/es/form/FormItem";
+
 
 
 function Register() {
-  const navigate=useNavigate();
-  
+  const navigate = useNavigate();
+
   const onFinish = async (values) => {
     // console.log('Success:', values);
     try{
@@ -15,7 +15,7 @@ function Register() {
       console.log(response);
       if(response.status === 201) {
         message.success(response.message);
-        navigate("/login");
+        navigate("/login")
       }else{
         message.error(response.message);
       }
@@ -23,11 +23,12 @@ function Register() {
       message.error(err.message);
     }
   };
+  
   useEffect(() => {
     if(localStorage.getItem("token")){
-      navigate("/");
+      navigate("/")
     }
-  }, []);
+  },[]);
  return (
    <>
      <main className="App-header">
@@ -78,24 +79,6 @@ function Register() {
              ></Input>
            </Form.Item>
 
-           <Form.Item
-            label="Register as a Partner"
-            htmlFor="role"
-            name="role"
-            className="d-block text-center"
-            initialValue={false}
-            rules={[{required: true, message: "Please select an option"}]}
-            >
-            <div className="d-flex justify-content-start">
-              <Radio.Group
-                name="radiogroup"
-                className="flex-start"
-              >
-                <Radio value={'partner'}>Yes</Radio>
-                <Radio value={'User'}>No</Radio>
-              </Radio.Group>
-            </div>
-          </Form.Item>
 
            <Form.Item className="d-block">
              <Button
@@ -107,6 +90,25 @@ function Register() {
                Register
              </Button>
            </Form.Item>
+           <Form.Item
+                label="Register as a Partner"
+                htmlFor="role"
+                name="role"
+                className="d-block text-center"
+                initialValue={false}
+                rules={[{ required: true, message: "Please select an option!" }]}
+              >
+                <div className="d-flex justify-content-start">
+               
+                  <Radio.Group
+                    name="radiogroup"
+                    className="flex-start"
+                  >
+                    <Radio value={'partner'}>Yes</Radio>
+                    <Radio value={'user'}>No</Radio>
+                  </Radio.Group>
+                </div>
+              </Form.Item>
 
          </Form>
          <div>
@@ -117,7 +119,7 @@ function Register() {
        </section>
      </main>
    </>
- );           
+ );
 }
 
 

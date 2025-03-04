@@ -67,15 +67,24 @@ function ProtectedRoute({ children }) {
 
   const getValidUser = async () => {
     try {
-      dispatch(showLoading());
-      const response = await GetCurrentUser();
-      console.log(response)
-      dispatch(setUser(response.data));
-      dispatch(hideLoading());
-      // Hide Loader
+        dispatch(showLoading());
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login");
+            return;
+        }
+        const response = await GetCurrentUser();
+        if (response.message === "jwt expired") {
+            localStorage.removeItem("token");
+            navigate("/login");
+            return;
+        }
+        dispatch(setUser(response.data));
     } catch (error) {
-      dispatch(setUser(null));
-      message.error(error.message);
+        localStorage.removeItem("token");
+        navigate("/login");
+    } finally {
+        dispatch(hideLoading());
     }
   };
 

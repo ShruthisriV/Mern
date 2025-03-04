@@ -68,7 +68,7 @@ const updateTheatre = async (req,res) => {
 
 const deleteTheatre = async (req,res) => {
     try{
-        const {theatreId} = req.params; 
+        const {theatreId} = req.params;    
         const deletedTheatre = await TheatreModel.findOneAndDelete({_id:theatreId});
         res.status(200).json({
             success: true,
@@ -88,7 +88,6 @@ const partnerTheatres =  async (req,res) => {
     try{
         let {partnerId} = req.params;
         const allPartnerTheatres = await TheatreModel.find({owner: partnerId});
-
         res.status(200).json({
             success: true,
             message:"partner theatre retrieved",

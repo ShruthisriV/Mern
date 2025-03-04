@@ -10,6 +10,7 @@ import store from "./redux/store";
 import Admin from "./pages/Admin";
 import Partner from "./pages/Partner";
 import User from "./pages/User";
+
 function App() {
   return (
     <Provider store={store}>

@@ -2,7 +2,7 @@ const {axiosInstance} = require("./index");
 
 export const addTheatre = async (value) => {
     try{
-        const response = await axiosInstance.post("/api/theatres", value);
+        const response = await axiosInstance.post("/api/theatres", value)
         return response.data
     }catch(err){
         console.log(err);
@@ -44,7 +44,7 @@ export const deleteTheatre = async (obj) => {
 export const partnerTheatres = async (obj) => {
     try{
         console.log("hello",obj);
-        const response = await axiosInstance.get(`/api/theatres/partner/${obj["_id"]}`);
+        const response = await axiosInstance.get(`/api/theatres/partner/${obj["_id"]}`)
         return response.data
     }catch(err){
         console.log(err);
