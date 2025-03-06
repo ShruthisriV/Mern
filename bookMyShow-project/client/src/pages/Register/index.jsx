@@ -12,13 +12,15 @@ function Register() {
     // console.log('Success:', values);
     try{
       const response = await RegisterUser(values);
-      console.log(response);
-      if(response.status === 201) {
-        message.success(response.message);
-        navigate("/login")
-      }else{
-        message.error(response.message);
-      }
+      // console.log(response);
+      // if(response.status === 201) {
+      //   message.success(response.message);
+      //   navigate("/login")
+      // }else{
+      //   message.error(response.message);
+      // }
+      message.success("User registered successfully");
+      navigate("/login");
     }catch(err){
       message.error(err.message);
     }
