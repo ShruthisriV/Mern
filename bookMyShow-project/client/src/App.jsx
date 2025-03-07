@@ -9,7 +9,9 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import Admin from "./pages/Admin";
 import Partner from "./pages/Partner";
-import User from "./pages/User";
+import User from "./pages/User"; 
+import SingleMovie from "./pages/SingleMovie";
+import BookShow from "./pages/BookShow";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
           <Route path="/admin" element={<ProtectedRoute><Admin/></ProtectedRoute>} />
           <Route path="/partner" element={<ProtectedRoute><Partner/></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><User/></ProtectedRoute>} />
+          <Route path="/movie/:id" element={<ProtectedRoute><SingleMovie/></ProtectedRoute>} />
+          <Route path="/book-show/:id" element={<ProtectedRoute><BookShow/></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </div>
