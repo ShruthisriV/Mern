@@ -5,6 +5,7 @@ import { getShowById } from "../api/shows";
 import { useNavigate, useParams } from "react-router-dom";
 import { message, Card, Row, Col, Button } from "antd";
 import moment from 'moment';
+import StripeCheckout from 'react-stripe-checkout';
 
 const BookShow = () => {
     const { user } = useSelector((store) => store.users);
@@ -29,6 +30,11 @@ const BookShow = () => {
             message.error(err.message);
             dispatch(hideLoading());
         }
+    }
+
+    const onToken = async (token) => {
+        console.log(token);
+        //make payment api
     }
 
     const getSeats = () => {
@@ -103,8 +109,12 @@ const BookShow = () => {
                 >
                 { getSeats() }
 
-                
-                { selectedSeats.length > 0 && <li> {selectedSeats} </li>}
+                { selectedSeats.length > 0 && <StripeCheckout billingAddress amount = {selectedSeats.length * show.ticketPrice*100} currency="INR" stripeKey="pk_test_51R0MHeFbQ2PfGMxis66GIpqRKS2GjEu4mNFupaRva2IASWhMd262g3ygNPjdryGq4FdSfEWruxyj7XPtGNn9Enm400yhDJ9RGv" token={onToken}>
+                 <div className="max-width-600 mx-auto">
+                     <Button type="primary" shape="round" size="large" block>Pay Now</Button>
+                 </div>
+                 </StripeCheckout>
+                }
                 </Card>                
             </Col>
         </Row>} 
