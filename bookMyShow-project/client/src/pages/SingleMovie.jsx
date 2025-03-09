@@ -16,7 +16,9 @@ function SingleMovie() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleDate = () => {};
+  const handleDate = (e) => {
+    setDate(e.target.value);
+  };
   const getData = async () => {
     try {
       dispatch(showLoading());
@@ -30,6 +32,7 @@ function SingleMovie() {
       dispatch(hideLoading());
     } catch (err) {
       message.error(err.message);
+    }finally{
       dispatch(hideLoading());
     }
   };
@@ -38,7 +41,7 @@ function SingleMovie() {
     try {
       dispatch(showLoading());
       const response = await getAllTheatresByMovie({ movie: params.id, date });
-      console.log("ahow and theatres by movie", response);
+      console.log("show and theatres by movie", response);
       if (response.success) {
         setTheatre(response.data);
       } else {
