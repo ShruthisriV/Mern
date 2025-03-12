@@ -43,9 +43,9 @@ async function emailHelper(templateName, receiverEmail, creds) {
   }
 }
 
-emailHelper("otp", "shruthiraoveerla06@gmail.com", {
-  name: "Krishan",
-  otp: "1234",
-});
+// emailHelper("otp", "shruthiraoveerla06@gmail.com", {
+//   name: "Krishan",
+//   otp: "1234",
+// });
 
 module.exports = emailHelper;

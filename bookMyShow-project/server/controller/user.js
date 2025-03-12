@@ -1,9 +1,9 @@
 const UserModel = require("../models/user");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const emailHelper = require("../utils/emailHelper");
 require("dotenv").config({ path: "../.env" });
 const privateKey = process.env.JWT_KEY;
-const emailHelper = require("../utils/emailHelper");
 const registerUser = async (req, res) => {
   try {
     const { email } = req.body;
@@ -19,7 +19,10 @@ const registerUser = async (req, res) => {
     }
     // If user does not exist, create a new user and save it to the database
     // write code
-    const newUser = new UserModel(req.body);
+    //hash the password
+    const saltRounds = 10; //the higher the number , the more secure but slower the hashing process
+    const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+    const newUser = new UserModel({ ...req.body, password: hashedPassword });
     await newUser.save();
     // Send a response to the user that Registration Successful, Please login
     // write code
@@ -44,7 +47,8 @@ const loginUser = async (req, res) => {
         message: "User does not exists. Please register.",
       });
     }
-    if (passwordFromClient !== user.password) {
+    const match = await bcrypt.compare(passwordFromClient, user.password);
+    if (!match) {
       return res.status(400).json({
         message: "invalid credentials",
       });
@@ -87,61 +91,60 @@ const currentUser = async (req, res) => {
   }
 };
 
-const forgetPassword = async(req, res) => {
-  try{
-    const {email} = req.body;
-    if(!email){
+const forgetPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
       return res.status(401).json({
         status: "failure",
-        message: "Please enter the email for forget Password"
-      })
+        message: "Please enter the email for forget Password",
+      });
     }
-    let user = await UserModel.findOne({email});
-    if(!user){
+    let user = await UserModel.findOne({ email });
+    if (!user) {
       return res.status(401).json({
         status: "failure",
-        message: "user not found"
-      })
+        message: "user not found",
+      });
     }
     const otp = otpGenerator();
     user.otp = otp;
-    user.otpExpiry = Date.now()+ 3*60*1000 ;
+    user.otpExpiry = Date.now() + 3 * 60 * 1000;
     await user.save();
     res.status(200).json({
       status: "success",
-      message: "otp send to your email"
-    })
-    await emailHelper("otp", user.email, {name: user.name, otp})
-
-  }catch(err){
+      message: "otp send to your email",
+    });
+    await emailHelper("otp", user.email, { name: user.name, otp });
+  } catch (err) {
     console.log(err);
     return res.status(500).json({
       message: err.message,
     });
   }
-}
+};
 
-const resetPassword = async(req, res) => {
-  try{
+const resetPassword = async (req, res) => {
+  try {
     let resetDetails = req.body;
-    if(!resetDetails.password || !resetDetails.otp){
+    if (!resetDetails.password || !resetDetails.otp) {
       return res.status(401).json({
         status: "failure",
-        message: "invalid request"
-      })
+        message: "invalid request",
+      });
     }
-    const user = await UserModel.findOne({otp: resetDetails.otp});
-    if(!user){
+    const user = await UserModel.findOne({ otp: resetDetails.otp });
+    if (!user) {
       return res.status(401).json({
         status: "failure",
-        message: "user not found"
-      })
+        message: "user not found",
+      });
     }
-    if(Date.now() > user.otpExpiry){
+    if (Date.now() > user.otpExpiry) {
       return res.status(401).json({
         status: "failure",
-        message: "otp expired"
-      })
+        message: "otp expired",
+      });
     }
     user.password = resetDetails.password;
     user.otp = undefined;
@@ -149,20 +152,18 @@ const resetPassword = async(req, res) => {
     await user.save();
     res.status(200).json({
       status: "success",
-      message: "otp send to your email"
-    })
-
-  }catch(err){
+      message: "otp send to your email",
+    });
+  } catch (err) {
     console.log(err);
     return res.status(500).json({
       message: err.message,
     });
   }
-}
+};
 
-
-function otpGenerator(){
-  return Math.floor(Math.random()*1000000+9000000);
+function otpGenerator() {
+  return Math.floor(Math.random() * 1000000 + 9000000);
 }
 
 module.exports = {
@@ -170,5 +171,5 @@ module.exports = {
   loginUser,
   currentUser,
   forgetPassword,
-  resetPassword
+  resetPassword,
 };
