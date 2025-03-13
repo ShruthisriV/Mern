@@ -12,6 +12,7 @@ export const RegisterUser = async (value) => {
 }
 
 export const LoginUser = async (value) => {
+    console.log(value)
     try{
         const response = await axiosInstance.post("api/users/login", value);
         return response.data;
