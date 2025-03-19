@@ -39,34 +39,41 @@ async function emailHelper(templateName, receiverEmail, creds) {
       subject: "Mail from ScalerShows", // Subject line
       text: `Hi ${creds.name} this is your reset otp ${creds.otp}`, // plain text body
       html: replaceContent(content, creds), // html body
+      attachments: [        
+        {
+          filename: 'notes.txt',
+          content: 'Some notes about this e-mail',
+          contentType: 'text/plain' // optional, would be detected from the filename
+        },
+      ]
     };
     const transporter = nodemailer.createTransport(transportDetails);
     //send mail with defined transport object
 
     await transporter.sendMail(emailDetails);
 
-    const response = await axios.post(
-      API_URL,
-      {
-        from: "onboarding@resend.dev",
-        to: "shruthiraoveerla06@gmail.com",
-        subject: "Mail from ScalerShows",
-        text: `Hi ${creds.name} this is your reset otp ${creds.otp}`, // plain text body
-        html: replaceContent(content, creds),
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${RESEND_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        httpsAgent: new https.Agent({ rejectUnauthorized: false }),
-      }
-    );
-    console.log("Email sent successfully:", response.data);
+    // const response = await axios.post(
+    //   API_URL,
+    //   {
+    //     from: "onboarding@resend.dev",
+    //     to: "shruthiraoveerla06@gmail.com",
+    //     subject: "Mail from ScalerShows",
+    //     text: `Hi ${creds.name} this is your reset otp ${creds.otp}`, // plain text body
+    //     html: replaceContent(content, creds),
+    //   },
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${RESEND_API_KEY}`,
+    //       "Content-Type": "application/json",
+    //     },
+    //     httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+    //   }
+    // );
+    // console.log("Email sent successfully:", response.data);
   } catch (err) {
     console.error("Error sending email:", err.response?.data || err.message);
   }
 }
 
 emailHelper("otp", "veerlashruthirao@gmail.com", { name: "Shruthi", otp: "1234" });
-module.exports = emailHelper;
+// module.exports = emailHelper;
