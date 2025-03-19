@@ -24,26 +24,26 @@ async function emailHelper(templateName, receiverEmail, creds) {
       templateName + ".html"
     );
     let content = await fs.promises.readFile(templatePath, "utf-8");
-  //   const transportDetails = {
-  //     host: "smtp.resend.com",
-  //     port: 587,
-  //     auth: {
-  //       user: "resend",
-  //       pass: RESEND_API_KEY,
-  //     },
-  //   };
+    const transportDetails = {
+      host: "smtp.resend.com",
+      port: 587,
+      auth: {
+        user: "resend",
+        pass: RESEND_API_KEY,
+      },
+    };
 
-    // const emailDetails = {
-    //   from: "onboarding@resend.dev", // sender address
-    //   to: "shruthiraoveerla06@gmail.com", // list of receivers
-    //   subject: "Mail from ScalerShows", // Subject line
-    //   text: `Hi ${creds.name} this is your reset otp ${creds.otp}`, // plain text body
-    //   html: replaceContent(content, creds), // html body
-    // };
-    // const transporter = nodemailer.createTransport(transportDetails);
-    // send mail with defined transport object
+    const emailDetails = {
+      from: "onboarding@resend.dev", // sender address
+      to: "shruthiraoveerla06@gmail.com", // list of receivers
+      subject: "Mail from ScalerShows", // Subject line
+      text: `Hi ${creds.name} this is your reset otp ${creds.otp}`, // plain text body
+      html: replaceContent(content, creds), // html body
+    };
+    const transporter = nodemailer.createTransport(transportDetails);
+    //send mail with defined transport object
 
-    // await transporter.sendMail(emailDetails);
+    await transporter.sendMail(emailDetails);
 
     const response = await axios.post(
       API_URL,
