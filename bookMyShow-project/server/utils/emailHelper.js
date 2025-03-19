@@ -1,13 +1,18 @@
 const nodemailer = require("nodemailer");
 const path = require("path");
+const https = require("https");
+const axios = require("axios");
 const fs = require("fs");
-const dotenv = require("dotenv").config({ path: "../.env" });
-const { SENDGRID_API_KEY } = process.env;
+require("dotenv").config({ path: "../.env" });
+const { RESEND_API_KEY } = process.env;
+console.log(RESEND_API_KEY);
+const API_URL = "https://api.resend.com/emails";
 
 function replaceContent(content, creds) {
   let allKeys = Object.keys(creds); //[name,otp];
   allKeys.forEach((key) => {
-    content = content.replace(`##${key}`, creds[key]);
+    console.log(key);
+    content = content.replace(`##{${key}}`, creds[key]);
   });
   return content;
 }
@@ -19,33 +24,49 @@ async function emailHelper(templateName, receiverEmail, creds) {
       templateName + ".html"
     );
     let content = await fs.promises.readFile(templatePath, "utf-8");
-    const transportDetails = {
-      host: "smtp.sendgrid.net",
-      port: 587,
-      auth: {
-        user: "apikey",
-        pass: SENDGRID_API_KEY,
-      },
-    };
+  //   const transportDetails = {
+  //     host: "smtp.resend.com",
+  //     port: 587,
+  //     auth: {
+  //       user: "resend",
+  //       pass: RESEND_API_KEY,
+  //     },
+  //   };
 
-    const emailDetails = {
-      from: "shruthiraoveerla06@gmail.com", // sender address
-      to: receiverEmail, // list of receivers
-      subject: "Mail from developer", // Subject line
-      text: `Hi ${creds.name} this is your reset otp ${creds.otp}`, // plain text body
-      html: replaceContent(content, creds), // html body
-    };
-    const transporter = nodemailer.createTransport(transportDetails);
+    // const emailDetails = {
+    //   from: "onboarding@resend.dev", // sender address
+    //   to: "shruthiraoveerla06@gmail.com", // list of receivers
+    //   subject: "Mail from ScalerShows", // Subject line
+    //   text: `Hi ${creds.name} this is your reset otp ${creds.otp}`, // plain text body
+    //   html: replaceContent(content, creds), // html body
+    // };
+    // const transporter = nodemailer.createTransport(transportDetails);
     // send mail with defined transport object
-    await transporter.sendMail(emailDetails);
+
+    // await transporter.sendMail(emailDetails);
+
+    const response = await axios.post(
+      API_URL,
+      {
+        from: "onboarding@resend.dev",
+        to: "shruthiraoveerla06@gmail.com",
+        subject: "Mail from ScalerShows",
+        text: `Hi ${creds.name} this is your reset otp ${creds.otp}`, // plain text body
+        html: replaceContent(content, creds),
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${RESEND_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+      }
+    );
+    console.log("Email sent successfully:", response.data);
   } catch (err) {
-    console.log(err);
+    console.error("Error sending email:", err.response?.data || err.message);
   }
 }
 
-// emailHelper("otp", "shruthiraoveerla06@gmail.com", {
-//   name: "Krishan",
-//   otp: "1234",
-// });
-
+emailHelper("otp", "veerlashruthirao@gmail.com", { name: "Shruthi", otp: "1234" });
 module.exports = emailHelper;
