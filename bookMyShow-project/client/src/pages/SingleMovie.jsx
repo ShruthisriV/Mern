@@ -17,7 +17,7 @@ function SingleMovie() {
   const navigate = useNavigate();
 
   const handleDate = (e) => {
-    setDate(e.target.value);
+    setDate(e.target.value)
   };
   const getData = async () => {
     try {
@@ -29,9 +29,9 @@ function SingleMovie() {
       } else {
         message.error(response.message);
       }
-      dispatch(hideLoading());
     } catch (err) {
       message.error(err.message);
+      
     }finally{
       dispatch(hideLoading());
     }
@@ -110,10 +110,10 @@ function SingleMovie() {
         {theatres.length > 0 && (
           <div className="theatre-wrapper mt-3 pt-3">
             <h2>Theatres</h2>
-            {theatres.map((theatre) => {
+            {theatres.map((theatre, index) => {
               return (
-                <div key={theatre._id}>
-                  <Row gutter={24} key={theatre._id}>
+                <div key={`theatre-${theatre._id}-${index}`}>
+                  <Row gutter={24} >
                     <Col xs={{ span: 24 }} lg={{ span: 8 }}>
                       <h3>{theatre.name}</h3>
                       <p>{theatre.address}</p>

@@ -32,7 +32,7 @@ function TheatresTable() {
         message.success(response.message);
         getData();
       }
-      dispatch(hideLoading);
+      dispatch(hideLoading());
     }catch(err){
       dispatch(hideLoading());
       message.error(err.message)

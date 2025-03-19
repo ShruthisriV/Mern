@@ -65,26 +65,72 @@ function ProtectedRoute({ children }) {
     },
   ];
 
+  // const navItems = [
+  //   {
+  //     key: "1", 
+  //     label: "Home",
+  //     icon: <HomeOutlined />,
+  //   },
+  //   {
+  //     key: "2", // Add this
+  //     label: `${user ? user.name : ""}`,
+  //     icon: <UserOutlined />,
+  //     children: [
+  //       {
+  //         label: (
+  //                     <span
+  //                     onClick={() => {
+  //                       if (user.role === 'admin') {
+  //                         navigate("/admin");
+  //                       } else if (user.role === 'partner') {
+  //                         navigate("/partner");
+  //                       } else {
+  //                         navigate("/profile");
+  //                       }
+  //                     }}
+  //                     >
+  //                       My Profile
+  //                     </span>
+  //                   ),
+  //                   icon: <ProfileOutlined />,
+  //       },
+  //       {
+  //         label: (
+  //           <Link
+  //             to="/login"
+  //             onClick={() => {
+  //               localStorage.removeItem("token");
+  //             }}
+  //           >
+  //             Log Out
+  //           </Link>
+  //         ),
+  //         icon: <LogoutOutlined />,
+  //       },
+  //     ],
+  //   },
+  // ];
+
   const getValidUser = async () => {
     try {
-        dispatch(showLoading());
-        const token = localStorage.getItem("token");
-        if (!token) {
-            navigate("/login");
-            return;
-        }
-        const response = await GetCurrentUser();
-        if (response.message === "jwt expired") {
-            localStorage.removeItem("token");
-            navigate("/login");
-            return;
-        }
-        dispatch(setUser(response.data));
-    } catch (error) {
+      dispatch(showLoading());
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+      const response = await GetCurrentUser();
+      if (response.message === "jwt expired") {
         localStorage.removeItem("token");
         navigate("/login");
+        return;
+      }
+      dispatch(setUser(response.data));
+    } catch (error) {
+      localStorage.removeItem("token");
+      navigate("/login");
     } finally {
-        dispatch(hideLoading());
+      dispatch(hideLoading());
     }
   };
 

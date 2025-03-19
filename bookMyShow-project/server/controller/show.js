@@ -79,25 +79,25 @@ const getAllShowsByMovie = async (req, res) => {
   try {
     const { movie, date } = req.body;
     const shows = await ShowModel.find({ movie, date }).populate("theatre");
-    console.log("all shows", shows);
-    //filter out the unique theatres
-    // let uniqueTheatres = [];
-    // shows.forEach((show) => {
 
-    // })
-    let uniqueTheatres = [];
+    // Use a Map to track unique theatres by ID
+    const theatreMap = new Map();
+
     shows.forEach((show) => {
-      console.log(show.theatre.id);
-      
-      let isTheatre = uniqueTheatres.find((theatre => theatre.id === show.theatre.id));
-      if(!isTheatre){
-        let showsOfThisTheatre = shows.filter((showObj) => showObj.theatre.id === show.theatre.id);
-        uniqueTheatres.push({
+      const theatreId = show.theatre._id.toString();
+
+      if (!theatreMap.has(theatreId)) {
+        theatreMap.set(theatreId, {
           ...show.theatre._doc,
-          shows: showsOfThisTheatre
+          shows: [],
         });
       }
-    })
+
+      theatreMap.get(theatreId).shows.push(show);
+    });
+
+    const uniqueTheatres = Array.from(theatreMap.values());
+
     res.status(200).json({
       success: true,
       message: "sent show of theatre",
@@ -114,7 +114,9 @@ const getAllShowsByMovie = async (req, res) => {
 const getShowById = async (req, res) => {
   try {
     const { showId } = req.params;
-    const show = await ShowModel.findById(showId).populate("theatre").populate("movie");;
+    const show = await ShowModel.findById(showId)
+      .populate("theatre")
+      .populate("movie");
     res.status(200).json({
       success: true,
       message: "show found",
@@ -134,5 +136,5 @@ module.exports = {
   deleteShow,
   getAllShowsByTheatre,
   getAllShowsByMovie,
-  getShowById
+  getShowById,
 };

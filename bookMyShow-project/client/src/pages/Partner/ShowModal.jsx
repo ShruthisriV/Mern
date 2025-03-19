@@ -79,7 +79,7 @@ const ShowModal = ({
         response = await updateShow({
           ...values,
           showId: selectedShow._id,
-          // theatre: selectedTheatre._id,
+          // theatreId: selectedTheatre._id,
         });
       }
       if (response.success) {
@@ -224,7 +224,8 @@ const ShowModal = ({
           </Button>
         )}
       </div>
-      {view === "table" && <Table dataSource={shows} columns={columns} />}
+      {view === "table" && <Table dataSource={shows} columns={columns} rowKey="_id"/>}
+
       {(view === "form" || view === "edit") && (
         <Form
           className=""
@@ -323,7 +324,7 @@ const ShowModal = ({
                     <Select
                       id="movie"
                       placeholder="Select Movie"
-                      defaultValue={selectedMovie && selectedMovie.title}
+                      // defaultValue={selectedMovie && selectedMovie.title}
                       style={{ width: "100%", height: "45px" }}
                       options={movies.map((movie) => ({
                         key: movie._id,
