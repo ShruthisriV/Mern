@@ -40,11 +40,18 @@ async function emailHelper(templateName, receiverEmail, creds) {
       text: `Hi ${creds.name} this is your reset otp ${creds.otp}`, // plain text body
       html: replaceContent(content, creds), // html body
       attachments: [        
-        {
-          filename: 'notes.txt',
-          content: 'Some notes about this e-mail',
-          contentType: 'text/plain' // optional, would be detected from the filename
-        },
+        // {
+        //   filename: 'notes.txt',
+        //   content: 'Some notes about this e-mail',
+        //   contentType: 'text/plain' // optional, would be detected from the filename
+        // },
+        
+          {
+            filename: 'image.jpeg',
+            path: __dirname + '/image.jpeg',
+            // cid: 'nyan@example.com' // should be as unique as possible
+          }
+        
       ]
     };
     const transporter = nodemailer.createTransport(transportDetails);
@@ -52,6 +59,7 @@ async function emailHelper(templateName, receiverEmail, creds) {
 
     await transporter.sendMail(emailDetails);
 
+    //uncomment this and last line module.exports if we want to send an email
     // const response = await axios.post(
     //   API_URL,
     //   {
@@ -69,7 +77,7 @@ async function emailHelper(templateName, receiverEmail, creds) {
     //     httpsAgent: new https.Agent({ rejectUnauthorized: false }),
     //   }
     // );
-    // console.log("Email sent successfully:", response.data);
+    console.log("Email sent successfully:", response.data);
   } catch (err) {
     console.error("Error sending email:", err.response?.data || err.message);
   }
