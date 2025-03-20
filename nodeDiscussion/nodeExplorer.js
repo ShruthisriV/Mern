@@ -13,26 +13,3 @@ const fs = require("fs");
 
 // process.stdin, process.stdout, process.stderr
 // console.log(process.moduleLoadList);
-
-
-//GENERATE RANDOM CONTENT
-// const content = Math.random().toString(36).repeat(10000000);
-
-//WRITE CONTENT TO FILE ~130MB data
-// fs.writeFileSync(__dirname+"/bigFile.txt", content);
-//o/p:bigFile.txt is created with some content
-
-const http = require("http");
-const server = http.createServer();
-
-server.listen(3000, () => {
-    console.log("server started at port 3000");
-});
-
-server.on("request", (req, res) => {
-    fs.readFile("./bigFile.txt", (err, data) => {
-        if(err) console.log(err);
-        res.end(data);
-        
-    })
-})
